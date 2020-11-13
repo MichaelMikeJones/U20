@@ -139,6 +139,8 @@ body {
   color: var(--color-white);
   min-height: 100vh;
   padding: 1rem 0; }
+  body > * {
+    min-width: 0; }
   @media only screen and (max-width: 75em) {
     body {
       grid-template-columns: [start] 1rem [start-panel] repeat(2, 1fr) [end-panel start-main] repeat(6, 1fr) [end-main] 1rem [end];
@@ -382,13 +384,11 @@ a {
     white-space: nowrap;
     text-overflow: ellipsis;
     flex-basis: 60%;
-    width: 60%;
     display: block; }
     @media only screen and (max-width: 37.5em) {
       .url__org {
         order: 10;
-        flex-basis: 100% !important;
-        width: 100% !important; } }
+        flex-basis: 100% !important; } }
   .url__delete {
     background: none;
     border: none;
@@ -398,8 +398,7 @@ a {
       color: currentColor; }
 
 .url-list-account .url__org {
-  flex-basis: 50%;
-  width: 50%; }
+  flex-basis: 50%; }
 
 .pagination {
   display: flex;
