@@ -1,9 +1,11 @@
 const nodemailer = require("nodemailer");
+// const sendinBlue = require('nodemailer-sendinblue-transport');
 
 class Email {
     static transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_SERVER,
-        port: parseInt(process.env.EMAIL_PORT, 10),
+        //host: process.env.EMAIL_SERVER,
+        //port: parseInt(process.env.EMAIL_PORT, 10),
+        service: 'gmail',
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD,
