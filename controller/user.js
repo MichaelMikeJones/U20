@@ -34,7 +34,7 @@ exports.avatarHandler = CatchAsync(async(req, res, next) => {
     const ext = mime.extension(req.file.mimetype);
     const filename = `avatar-${req.user._id}-${Date.now()}${ext ? "." + ext : ""}`;
     const path = Path.resolve('public/img', filename);
-    await sharp(req.file.buffer).resize(300, 300).toFile(path);
+    await sharp(req.file.buffer, { failOnError: false }).resize(300, 300).toFile(path);
     req.body.avatar = filename;
     next();
 });

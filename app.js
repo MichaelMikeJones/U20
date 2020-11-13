@@ -8,6 +8,7 @@ const hpp = require("hpp");
 const compression = require("compression");
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const AppError = require("./utilities/AppError");
 const globalErrorHandler = require("./controller/error");
 const userRoute = require("./routers/user");
@@ -50,6 +51,9 @@ app.use(
         limit: "10kb",
     })
 );
+
+// cors
+app.use(cors());
 
 // compressing json and html
 app.use(compression());
