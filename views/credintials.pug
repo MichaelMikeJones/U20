@@ -1,0 +1,18 @@
+extends base
+
+block content
+
+    include _dashboard-panel
+
+    .main-dashboard.box
+        form#form-updatepass.form.form-dashboard
+            .form-box
+                label(for="currentpassword") Current password
+                input#currentpassword.inputtext(type="password" name="currentpassword" minlength="8" required)
+            .form-box
+                label(for="password") Password
+                input#password.inputtext(type="password" name="password" minlength="8" required)
+            .form-box
+                label(for="passwordconfirm") Confirm password
+                input#passwordconfirm.inputtext(type="password" name="passwordconfirm" minlength="8" required)
+            input.btn.btn--cta.btn--cta--small(type="submit" value="Update")

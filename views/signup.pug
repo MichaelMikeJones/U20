@@ -1,0 +1,18 @@
+extends base
+
+block content
+    .main
+        form#form-signup.form.form-center
+            .form-box
+                label(for="name") Name
+                input#name.inputtext(type="text" name="name" required="")
+            .form-box
+                label(for="email") Email
+                input#email.inputtext(type="email" name="email" required="")
+            .form-box
+                label(for="password") Password
+                input#password.inputtext(type="password" name="password" minlength="8" required="")
+            .form-box
+                label(for="passwordconfirm") Password confirm
+                input#passwordconfirm.inputtext(type="password" name="passwordconfirm" minlength="8" required="")
+            input.btn.btn--cta(type="submit" value="Signup")

@@ -1,0 +1,15 @@
+extends base
+
+block content
+    .main
+        form#form-login.form.form-center
+            .form-box
+                label(for="email") Email
+                input#email.inputtext(type="email" name="email" required="")
+            .form-box
+                label(for="password") Password
+                input#password.inputtext(type="password" name="password" minlength="8" required="")
+            input.btn.btn--cta(type="submit" value="Login")
+        .auth.u-margin-top-small
+            a.btn.btn-login(href="/forgot") Forgot password?
+            a.btn.btn-login(href="/signup") Signup

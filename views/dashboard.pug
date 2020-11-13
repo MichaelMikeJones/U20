@@ -1,0 +1,21 @@
+extends base
+
+block content
+    include _dashboard-panel
+    
+    .main-dashboard.box
+        form#form-updateprofile.form.form-dashboard
+            .form-box
+                label(for="name") Name
+                input#name.inputtext(type="text" name="name" value=`${user.fullname}`)
+            .form-box
+                label(for="email") Email
+                input#email.inputtext(type="email" name="email" required="" value=`${user.email}`)
+            .form-box
+                label(for="website") Website
+                input#website.inputtext(type="url" name="website" value=`${user.website ? user.website : ''}`)
+            .form-box
+                label(for="avatar")
+                    img.user__avatar.user__avatar__form#avatar__img(src=`/img/${user.avatar}` alt=`${user.fullname}`)
+                input#avatar(type="file" name="avatar" style="display:none;")
+            input.btn.btn--cta.btn--cta--small(type="submit" value="Update")

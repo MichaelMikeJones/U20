@@ -1,0 +1,18 @@
+extends base
+
+block content
+    include _dashboard-panel
+    .main-dashboard.box
+        - if (urls.length > 0)
+            .urls-list.url-list-account
+                include _mixins
+                for url in urls
+                    +urlElement(url, false)
+                
+            - const pageNumbers = [...Array(noPages).keys()];
+            .pagination.u-margin-top-small#pagination-account
+                for pageNumber in pageNumbers
+                        button.pagination__item.btn(data-page=`${pageNumber + 1}`)= pageNumber + 1
+        
+        - else 
+            h1 There is no URL. Create one

@@ -1,0 +1,10 @@
+.header
+    a(href="/")
+        img.logo(src="/img/logo.png" alt="site logo")
+    .auth
+        if user
+            a.btn#btn-logout(href="#") Logout
+            a.btn(href="/account") Account
+        else
+            a.btn(href="/login") Login
+            a.btn(href="/signup") Signup

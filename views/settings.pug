@@ -1,0 +1,25 @@
+extends base
+
+block content
+    include _dashboard-panel
+    .main-dashboard.box
+        form#form-updateSettings.form.form-dashboard
+            .form-box.form-box--horizontal
+                span.setting__title Profile visible to others
+                label.switch.setting__toggle
+                    if user.visibleProfile
+                        input#checkbox-profile-visible.checkbox(type="checkbox" autocomplete="off" checked)
+                    else
+                        input#checkbox-profile-visible.checkbox(type="checkbox" autocomplete="off")
+
+                    span.slider
+            .form-box.form-box--horizontal
+                span.setting__title Use Two-factor authenticating
+                    span.setting__title__secondary After login, email will be used to authenticate
+                label.switch.setting__toggle
+                    if user.twoWayAuth
+                        input#checkbox-twoway-auth.checkbox(type="checkbox" autocomplete="off" checked)
+                    else
+                        input#checkbox-twoway-auth.checkbox(type="checkbox" autocomplete="off")
+                    span.slider
+            input.btn.btn--cta.btn--cta--small(type="submit" value="Update")

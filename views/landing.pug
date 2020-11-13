@@ -1,0 +1,37 @@
+extends base
+
+block content
+    .main
+        form#form-shorten.form.form-center
+            .form-box
+                label(for="orgurl") Your absolute URL
+                input#orgurl.inputtext(type="url" name="orgurl" required="")
+            .form-box
+                label(for="targeturl") Target URL 
+                    span (optional: 6 lower alphanumeric char)
+                input#targeturl.inputtext(type="text" name="targeturl" pattern="[a-z0-9]{6}")
+            if user
+                .form-box.form-box--horizontal
+                    label(for="public") Public URL?
+                        span (URL will be visible)
+                    label.switch.setting__toggle
+                        input#public.checkbox(type="checkbox" name="public")
+                        span.slider
+            input.btn.btn--cta(type="submit" value="Shorten URL")
+        .cp-term.u-margin-top-medium.u-margin-bottom-medium Any illegal use based on any country's law, will have consequences on user.
+
+        .result-box.u-width-100
+
+        .box.u-margin-top-medium.u-width-100
+            h1.u-margin-bottom-small Public URLs
+            include _mixins
+            
+            .urls-list.url-list-public
+                for url in publicUrls
+                    +urlElement(url, true)
+            
+            - const pageNumbers = [...Array(noPages).keys()];
+            .pagination.u-margin-top-small#pagination-public
+                for pageNumber in pageNumbers
+                    button.pagination__item.btn(data-page=`${pageNumber + 1}`)= pageNumber + 1
+                
