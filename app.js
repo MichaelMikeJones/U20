@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const compression = require("compression");
 const express = require("express");
 const morgan = require("morgan");
 const AppError = require("./utilities/AppError");
@@ -49,6 +50,9 @@ app.use(
         limit: "10kb",
     })
 );
+
+// compressing json and html
+app.use(compression());
 
 // accepting cookies
 app.use(cookieParser());
