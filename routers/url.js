@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.use(isLoggedIn);
 
+router.route("/:target").post(getUrl).delete(protect, deleteUrl);
 router.route("/").post(createUrl).get(protect, getAccountUrls, getAllUrls);
 router.route("/public-urls").get(getPublicURLs, getAllUrls);
 router.route("/latest-public").get(getLatestPublicURLs, getAllUrls);
-router.route("/:target").get(getUrl).delete(protect, deleteUrl);
 
 module.exports = router;

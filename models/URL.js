@@ -23,6 +23,9 @@ const UrlSchema = new mongoose.Schema({
             message: "Shorted id is not valid",
         },
     },
+    password: {
+        type: String
+    },
     visits: {
         type: Number,
         min: 0,
@@ -39,6 +42,13 @@ const UrlSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+UrlSchema.pre("save", function(next) {
+    if (!this.password) {
+        this.password = undefined;
+    }
+    next();
+})
 
 // creating taget
 UrlSchema.pre('validate', function(next) {

@@ -50,6 +50,15 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         return next(new AppError("Url not found!", 404));
     }
 
+    if (url.password) {
+        // password is associated with url
+        if (!req.body.password) {
+            return next(new AppError("Password is associated with url. pass the password.", 401));
+        } else if (req.body.password !== url.password) {
+            return next(new AppError("Password not correct", 401))
+        }
+    }
+
     // add one to visits
     url.visits += 1;
     url.save();

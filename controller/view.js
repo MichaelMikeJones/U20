@@ -11,6 +11,14 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         return next(new AppError("Url not found!", 404));
     }
 
+    if (url.password) {
+        // password is associated with url
+        return res.status(200).render("url-password", {
+            title: "Redirecting",
+            url
+        });
+    }
+
     // add one to visits
     url.visits += 1;
     url.save();

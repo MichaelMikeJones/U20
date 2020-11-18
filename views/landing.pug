@@ -10,6 +10,10 @@ block content
                 label(for="targeturl") Target URL 
                     span (optional: 6 lower alphanumeric char)
                 input#targeturl.inputtext(type="text" name="targeturl" pattern="[a-z0-9]{6}")
+            .form-box
+                label(for="password") Password
+                    span (optional: can't use this URL without password)
+                input#password.inputtext(type="password" name="password")
             if user
                 .form-box.form-box--horizontal
                     label(for="public") Public URL?

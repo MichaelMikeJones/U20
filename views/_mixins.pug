@@ -1,10 +1,6 @@
-// const limitStr = (text, limit) => {if(text.length <= limit) return text; return text.substr(0, limit) + '...';}
-
 mixin urlElement(url, showingPublic)
     .url
         a.btn.url__shorted(target="_blank" href=`/${url.target}`) /#{url.target}
-
-        // const limitedOrgUrl = showingPublic ? limitStr(url.orgUrl, 55) : limitStr(url.orgUrl, 40);
         a.btn.url__org(target="_blank" href=`${url.orgUrl}`)= url.orgUrl
         span.url__visits #{url.visits} visits
         if !showingPublic
