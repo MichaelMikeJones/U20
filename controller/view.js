@@ -8,10 +8,14 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
     const url = await UrlModel.findOne({ target: req.params.target });
 
     if (!url) {
-        return next(new AppError("Url not found!", 404));
+        return next(new AppError("URL not found!", 404));
     }
 
-    if (url.password) {
+    if (url.expiresIn < Date.now()) {
+        return next(new AppError("URL is expired", 410));
+    }
+
+    if (url.password || url.message) {
         // password is associated with url
         return res.status(200).render("url-password", {
             title: "Redirecting",

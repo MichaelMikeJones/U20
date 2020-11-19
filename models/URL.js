@@ -23,6 +23,8 @@ const UrlSchema = new mongoose.Schema({
             message: "Shorted id is not valid",
         },
     },
+    message: String,
+    expiresIn: Date,
     password: {
         type: String
     },

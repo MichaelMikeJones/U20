@@ -7,17 +7,25 @@ block content
                 label(for="orgurl") Your absolute URL
                 input#orgurl.inputtext(type="url" name="orgurl" required="")
             .form-box
-                label(for="targeturl") Target URL 
+                label(for="targeturl") Target URL
                     span (optional: 6 lower alphanumeric char)
                 input#targeturl.inputtext(type="text" name="targeturl" pattern="[a-z0-9]{6}")
             .form-box
                 label(for="password") Password
                     span (optional: can't use this URL without password)
                 input#password.inputtext(type="password" name="password")
+            .form-box
+                label(for="date") Expires in
+                    span (optional: URL will expire)
+                input#expiresin.inputtext(type="date" name="date" min=`${new Date().toISOString().split("T")[0]}`)
+            .form-box
+                label(for="message") Message
+                    span (optional: message will be shown to visiters of URL)
+                textarea#message.inputtext(type="text" name="message")
             if user
                 .form-box.form-box--horizontal
                     label(for="public") Public URL?
-                        span (URL will be visible)
+                        span (URL will be visible to others on this page)
                     label.switch.setting__toggle
                         input#public.checkbox(type="checkbox" name="public")
                         span.slider
