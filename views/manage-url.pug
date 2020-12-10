@@ -1,0 +1,28 @@
+extends base
+
+block content
+    include _dashboard-panel
+
+    .main-dashboard.box
+        form#form-updateurl.form.form-dashboard(data-target=`${url.target}`)
+            .form-box
+                label(for="org_url") Original URL
+                input#org_url.inputtext(type="text" name="org_url" value=`${url.orgUrl}`)
+            .form-box
+                label(for="shorted_url") Shorted URL
+                input#shorted_url.inputtext(type="text" name="shorted_url" value=`${url.target}`)
+            .form-box
+                label(for="password") Password
+                input#password.inputtext(type="password" name="password" value=`${url.password ? url.password : ''}`)
+            .form-box
+                label(for="expiresIn") Expires in
+                input#expiresIn.inputtext(type="date" name="expiresIn" value=`${url.expiresIn ? url.expiresIn.toISOString().split('T')[0] : ''}`)
+            .form-box
+                label(for="message") Message
+                textarea#message.inputtext(name="message" value=`${url.message ? url.message : ''}`)
+            input.btn.btn--cta.btn--cta--small(type="submit" value="Update")
+
+        label(for="selectYear") Select Year:
+        select#selectYear(style="margin-left: 1rem;")
+        //-    option(value="none") Select Year
+        canvas#visitsChart.u-margin-top-medium

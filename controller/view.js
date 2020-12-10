@@ -3,6 +3,9 @@ const UrlModel = require("../models/URL");
 const UserModel = require("../models/User");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
+const VisitModel = require("../models/Visit");
+const { getVisitorInfo } = require("./url");
+
 
 exports.getUrl = CatchAsync(async(req, res, next) => {
     const url = await UrlModel.findOne({ target: req.params.target });
@@ -11,9 +14,20 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         return next(new AppError("URL not found!", 404));
     }
 
-    if (url.expiresIn < Date.now()) {
+    if (url.expiresIn <= new Date().getDate()) {
         return next(new AppError("URL is expired", 410));
     }
+
+
+    // add one to visits
+    url.visits += 1;
+    url.save();
+
+    // add visitor
+    const visitorInfo = getVisitorInfo(req);
+    // add the url
+    visitorInfo.url = url._id;
+    const visitRecord = await VisitModel.create(visitorInfo);
 
     if (url.password || url.message) {
         // password is associated with url
@@ -23,23 +37,21 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         });
     }
 
-    // add one to visits
-    url.visits += 1;
-    url.save();
-
     res.status(200).redirect(url.orgUrl);
 });
 
 exports.getLanding = async(req, res, next) => {
+    /*
     const publicUrls = await UrlModel.find({ public: true }).limit(10).sort('-createdAt');
 
     const noPublicUrls = await UrlModel.countDocuments({ public: true });
     const noPages = Math.ceil(noPublicUrls / 10);
+    */
 
     res.status(200).render('landing', {
         title: 'Main page',
-        publicUrls,
-        noPages
+        //publicUrls,
+        //noPages
     });
 }
 exports.getDashboard = (req, res, next) => {
@@ -88,6 +100,18 @@ exports.getForgotpassword = (req, res, next) => {
         title: 'Forgot Password'
     });
 }
+
+exports.manageUrl = CatchAsync(async(req, res, next) => {
+    const url = await UrlModel.findOne({ target: req.params.target });
+
+    if (!url) return next(new AppError("URL not found", 404));
+
+    res.status(200).render('manage-url', {
+        title: 'Manage URL',
+        url
+    });
+});
+
 exports.getResetPassword = async(req, res, next) => {
     const token = req.params.token;
 

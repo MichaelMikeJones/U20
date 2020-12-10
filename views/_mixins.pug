@@ -4,5 +4,6 @@ mixin urlElement(url, showingPublic)
         a.btn.url__org(target="_blank" href=`${url.orgUrl}`)= url.orgUrl
         span.url__visits #{url.visits} visits
         if !showingPublic
-            span.url__state= url.public ? 'Public' : 'Private'
+            //- span.url__state= url.public ? 'Public' : 'Private'
             button.btn.url__delete Delete
+            a.btn.url__manage(href=`/account/urls/${url.target}`) Manage

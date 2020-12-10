@@ -1,7 +1,32 @@
+const bower = require('bowser');
+const VisitModel = require("../models/Visit");
 const UrlModel = require("../models/URL");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
 const APIFeatures = require("../utilities/APIFeatures");
+
+const getVisitorInfo = (req) => {
+    const info = {
+        userAgent: req.header('user-agent'), // User Agent we get from headers
+        referrer: req.get('referrer'), //  Likewise for Referer
+        ip: req.header('x-forwarded-for') || req.connection.remoteAddress || req.ip, // Get IP - allow for proxy
+    };
+
+    // ::ffff: is a subnet prefix for IPv4 (32 bit) addresses that are placed inside an IPv6 (128 bit) space.
+    // more info: https://stackoverflow.com/a/33790357/11672221
+    info.ip = info.ip.replace("::ffff:", "");
+
+    // adding more info
+    const res = bower.parse(info.userAgent);
+    info.os = res.os.name;
+    info.browser = res.browser.name;
+    info.browserVersion = res.browser.version;
+    info.device = res.platform.type;
+
+    return info;
+};
+
+exports.getVisitorInfo = getVisitorInfo;
 
 exports.getAccountUrls = (req, res, next) => {
     req.query.sort = '-createdAt';
@@ -50,7 +75,7 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         return next(new AppError("URL not found!", 404));
     }
 
-    if (url.expiresIn < Date.now()) {
+    if (url.expiresIn < new Date().getDate()) {
         return next(new AppError("URL is expired", 410));
     }
 
@@ -63,9 +88,16 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         }
     }
 
-    // add one to visits
-    url.visits += 1;
-    url.save();
+    // adding visits of api does not make sense
+    // // add one to visits
+    // url.visits += 1;
+    // url.save();
+
+    // // add visitor
+    // const visitorInfo = getVisitorInfo(req);
+    // // add the url
+    // visitorInfo.url = url._id;
+    // const visitRecord = await VisitModel.create(visitorInfo);
 
     res.status(200).json({
         status: "success",
@@ -92,7 +124,7 @@ exports.createUrl = CatchAsync(async(req, res, next) => {
 });
 
 exports.updateUrl = CatchAsync(async(req, res, next) => {
-    const updatedUrl = await PostModel.findOneAndUpdate({ target: req.params.target },
+    const updatedUrl = await UrlModel.findOneAndUpdate({ target: req.params.target },
         req.body, {
             runValidators: true,
             new: true,
@@ -100,7 +132,7 @@ exports.updateUrl = CatchAsync(async(req, res, next) => {
     );
 
     if (!updatedUrl) {
-        return next(new AppError("Post not found!", 404));
+        return next(new AppError("URL not found!", 404));
     }
 
     res.status(200).json({
@@ -132,5 +164,77 @@ exports.deleteUrl = CatchAsync(async(req, res, next) => {
         data: {
             url,
         },
+    });
+});
+
+exports.getVisitStats = CatchAsync(async(req, res, next) => {
+    const url = await UrlModel.findOne({ target: req.params.target });
+    if (!url) return next(new AppError("This URL does not exists", 404));
+
+    const funCountOccurs = `function(arr) {
+        var counts = {};
+        for (var i = 0; i < arr.length; i++) {
+        var num = arr[i];
+        counts[num] = counts[num] ? counts[num] + 1 : 1;
+        }
+        return counts}`;
+
+    const result = await VisitModel.aggregate([{
+            $match: { url: url._id }
+        },
+        {
+            $group: {
+                _id: {
+                    year: { $year: "$visitedAt" },
+                    month: { $month: "$visitedAt" },
+                },
+                total: { $sum: 1 },
+                devices: { $push: "$device" },
+                browser: { $push: "$browser" },
+                //browserVersion: { $push: "$browserVersion" },
+                os: { $push: "$os" },
+            }
+        },
+        {
+            $addFields: {
+                Devices: {
+                    $function: {
+                        body: funCountOccurs,
+                        args: ["$devices"],
+                        lang: "js"
+                    }
+                },
+                Os: {
+                    $function: {
+                        body: funCountOccurs,
+                        args: ["$os"],
+                        lang: "js"
+                    }
+                },
+                Browsers: {
+                    $function: {
+                        body: funCountOccurs,
+                        args: ["$browser"],
+                        lang: "js"
+                    }
+                },
+                Date: "$_id"
+            }
+
+        },
+        {
+            $project: {
+                _id: 0,
+                browser: 0,
+                os: 0,
+                devices: 0,
+            }
+        }
+    ]);
+
+    res.status(200).json({
+        status: "success",
+        createdAt: url.createdAt,
+        data: result
     });
 });

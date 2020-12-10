@@ -401,6 +401,13 @@ a {
     cursor: pointer; }
     .url__delete:hover {
       color: currentColor; }
+  .url__manage {
+    background: none;
+    border: none;
+    color: var(--color-notif-success);
+    cursor: pointer; }
+    .url__manage:hover {
+      color: currentColor; }
 
 .url-list-account .url__org {
   flex-basis: 50%; }

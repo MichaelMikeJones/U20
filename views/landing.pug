@@ -22,28 +22,29 @@ block content
                 label(for="message") Message
                     span (optional: message will be shown to visiters of URL)
                 textarea#message.inputtext(type="text" name="message")
-            if user
-                .form-box.form-box--horizontal
-                    label(for="public") Public URL?
-                        span (URL will be visible to others on this page)
-                    label.switch.setting__toggle
-                        input#public.checkbox(type="checkbox" name="public")
-                        span.slider
+            //-if user
+            //-    .form-box.form-box--horizontal
+            //-        label(for="public") Public URL?
+            //-            span (URL will be visible to others on this page)
+            //-        label.switch.setting__toggle
+            //-            input#public.checkbox(type="checkbox" name="public")
+            //-            span.slider
             input.btn.btn--cta(type="submit" value="Shorten URL")
         .cp-term.u-margin-top-medium.u-margin-bottom-medium Any illegal use based on any country's law, will have consequences on user.
 
         .result-box.u-width-100
 
-        .box.u-margin-top-medium.u-width-100
-            h1.u-margin-bottom-small Public URLs
-            include _mixins
-            
-            .urls-list.url-list-public
-                for url in publicUrls
-                    +urlElement(url, true)
-            
-            - const pageNumbers = [...Array(noPages).keys()];
-            .pagination.u-margin-top-small#pagination-public
-                for pageNumber in pageNumbers
-                    button.pagination__item.btn(data-page=`${pageNumber + 1}`)= pageNumber + 1
+        
+        //-.box.u-margin-top-medium.u-width-100
+        //-    h1.u-margin-bottom-small Public URLs
+        //-    include _mixins
+        //-    
+        //-    .urls-list.url-list-public
+        //-        for url in publicUrls
+        //-            +urlElement(url, true)
+        //-    
+        //-    - const pageNumbers = [...Array(noPages).keys()];
+        //-    .pagination.u-margin-top-small#pagination-public
+        //-        for pageNumber in pageNumbers
+        //-            button.pagination__item.btn(data-page=`${pageNumber + 1}`)= pageNumber + 1
                 

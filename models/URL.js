@@ -26,23 +26,32 @@ const UrlSchema = new mongoose.Schema({
     message: String,
     expiresIn: Date,
     password: {
-        type: String
+        type: String,
     },
     visits: {
         type: Number,
         min: 0,
         default: 0
     },
-    public: {
-        type: Boolean,
-        default: true
-    },
+    //public: {
+    //    type: Boolean,
+    //    default: true
+    //},
     user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     }
 }, {
     timestamps: true
+});
+
+// prevent saving empty or null values
+UrlSchema.pre('save', function(next) {
+    this.message = this.message ? this.message : undefined;
+    this.expiresIn = this.expiresIn ? this.expiresIn : undefined;
+    this.password = this.password ? this.password : undefined;
+
+    next();
 });
 
 UrlSchema.pre("save", function(next) {
@@ -60,11 +69,11 @@ UrlSchema.pre('validate', function(next) {
     next();
 });
 
-// Excluding the __v field from results
-UrlSchema.pre(/^find/, function(next) {
-    this.select("-__v");
-    next();
-});
+// // Excluding the __v field from results
+// UrlSchema.pre(/^find/, function(next) {
+//     this.select("-__v");
+//     next();
+// });
 
 const URL = mongoose.model("URL", UrlSchema);
 module.exports = URL;
