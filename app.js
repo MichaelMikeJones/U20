@@ -4,6 +4,7 @@ const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const favicon = require("serve-favicon");
 const hpp = require("hpp");
 const compression = require("compression");
 const express = require("express");
@@ -21,6 +22,9 @@ const app = express();
 // setting the view engine to pug and views directory
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
+
+// serving fav icon
+app.use(favicon(path.resolve(__dirname, 'public', 'img', 'favicon.png')));
 
 // serving the public folder
 app.use(express.static(path.join(__dirname, "public")));
