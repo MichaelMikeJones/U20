@@ -69,13 +69,15 @@ exports.getAllUrls = CatchAsync(async(req, res, next) => {
 });
 
 exports.getUrl = CatchAsync(async(req, res, next) => {
-    const url = await UrlModel.findOne({ target: req.params.target });
+    const url = await UrlModel.findOne({ target: req.params.target }).cache(120, {
+        visits: 1
+    });
 
     if (!url) {
         return next(new AppError("URL not found!", 404));
     }
 
-    if (url.expiresIn < new Date().getDate()) {
+    if (url.expiresIn && url.expiresIn < new Date().getDate()) {
         return next(new AppError("URL is expired", 410));
     }
 
@@ -129,7 +131,7 @@ exports.updateUrl = CatchAsync(async(req, res, next) => {
             runValidators: true,
             new: true,
         }
-    );
+    ).delCache();
 
     if (!updatedUrl) {
         return next(new AppError("URL not found!", 404));

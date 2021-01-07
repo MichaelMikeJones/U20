@@ -7,6 +7,7 @@ process.on("uncaughtException", (err) => {
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+require("./services/caching");
 
 dotenv.config({ path: "./config.env" });
 
