@@ -158,7 +158,7 @@ exports.deleteUrl = CatchAsync(async(req, res, next) => {
     }
 
     // Deleting the url doc
-    await UrlModel.findOneAndDelete({ target: req.params.target });
+    await UrlModel.findOneAndDelete({ target: req.params.target }).delCache();
 
     res.status(204).json({
         status: "success",
