@@ -5,13 +5,6 @@ const {
     protect
 } = require("../controller/auth");
 
-const {
-    googleOauth,
-    googleOauthCallback,
-    githubOauth,
-    githubOauthCallback
-} = require("../controller/oAuth");
-
 const { 
     getDashboard, 
     getForgotpassword, 
@@ -38,10 +31,6 @@ router.get("/account", protect, getDashboard);
 router.get("/forgot", getForgotpassword);
 router.get("/signup", getSignup);
 router.get("/reset/:token", getResetPassword);
-router.get("/login/google/callback", googleOauthCallback);
-router.get("/login/google", googleOauth);
-router.get("/login/github/callback", githubOauthCallback);
-router.get("/login/github", githubOauth);
 router.get("/login", getLogin);
 router.get("/:target", getUrl);
 router.get("/", getLanding);

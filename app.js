@@ -16,6 +16,7 @@ const userRoute = require("./routers/user");
 const uploadRoute = require("./routers/upload");
 const urlRoute = require("./routers/url");
 const viewRoute = require("./routers/view");
+const authRoute = require("./routers/auth");
 
 const app = express();
 
@@ -75,6 +76,7 @@ app.use(xss());
 app.use(hpp());
 
 // ROUTES
+app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/upload", uploadRoute);
 app.use("/api/url", urlRoute);
