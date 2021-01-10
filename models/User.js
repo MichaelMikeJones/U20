@@ -37,10 +37,18 @@ const UserSchema = new mongoose.Schema({
         },
     },
     google: {
-        select: false,
         id: String,
-        refreshToken: String,
-        accessToken: String,
+        tokens: {
+            access_token: String,
+            refresh_token: String
+        }
+    },
+    github: {
+        id: String,
+        tokens: {
+            access_token: String,
+            refresh_token: String
+        }
     },
     signedUpAt: {
         type: Date,
@@ -71,7 +79,12 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function(next) {
     // if password already does exists or passed or google id is passed, we move on
-    if (this.get("password") || (this.password && this.passwordConfirm) || this.google.id) {
+    if (
+        this.get("password") || 
+        (this.password && this.passwordConfirm) || 
+        this.google.id ||
+        this.github.id
+    ) {
         return next();
     }
 

@@ -7,7 +7,9 @@ const {
 
 const {
     googleOauth,
-    googleOauthCallback
+    googleOauthCallback,
+    githubOauth,
+    githubOauthCallback
 } = require("../controller/oAuth");
 
 const { 
@@ -38,6 +40,8 @@ router.get("/signup", getSignup);
 router.get("/reset/:token", getResetPassword);
 router.get("/login/google/callback", googleOauthCallback);
 router.get("/login/google", googleOauth);
+router.get("/login/github/callback", githubOauthCallback);
+router.get("/login/github", githubOauth);
 router.get("/login", getLogin);
 router.get("/:target", getUrl);
 router.get("/", getLanding);
