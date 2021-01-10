@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const UserModel = require("../models/User");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
-const Email = require("../utilities/Email");
+const Email = require("../services/Email");
 
 exports.signToken = (userID) => {
     // signing jwt token
