@@ -6,15 +6,15 @@ const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
 const Email = require("../utilities/Email");
 
-const signToken = (userID) => {
+exports.signToken = (userID) => {
     // signing jwt token
     return jwt.sign({ id: userID }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
 
-const createSendToken = (res, user, statusCode, message = undefined) => {
-    const token = signToken(user._id);
+exports.setTokenCookie = (res, user) => {
+    const token = exports.signToken(user._id);
 
     // httpOnly prevents access to token in client's browser, so it is safe
     const cookieOptions = {
@@ -26,11 +26,16 @@ const createSendToken = (res, user, statusCode, message = undefined) => {
     };
 
     res.cookie("jwt", token, cookieOptions);
+};
+
+exports.createSendToken = (res, user, statusCode, message = undefined) => {
+    exports.setTokenCookie(res, user);
 
     // Removing unnecessary fields from output
     user.password = undefined;
     user.__v = undefined;
     user.signedUpAt = undefined;
+    user.google = undefined;
 
     res.status(statusCode).json({
         status: "success",
@@ -50,7 +55,7 @@ exports.signup = CatchAsync(async(req, res, next) => {
         passwordConfirm: req.body.passwordConfirm,
     });
 
-    createSendToken(res, newUser, 201, "Signed up successfully.");
+    exports.createSendToken(res, newUser, 201, "Signed up successfully.");
 });
 
 exports.login = CatchAsync(async(req, res, next) => {
@@ -71,7 +76,7 @@ exports.login = CatchAsync(async(req, res, next) => {
         return next(new AppError("Email or password is wrong!", 401));
     }
 
-    createSendToken(res, user, 200, 'Logged in successfully');
+    exports.createSendToken(res, user, 200, 'Logged in successfully');
 });
 
 exports.isLoggedIn = CatchAsync(async(req, res, next) => {
@@ -194,7 +199,7 @@ exports.ResetPassword = CatchAsync(async(req, res, next) => {
     await user.save();
 
     // log the user in
-    createSendToken(res, user, 200, 'Password has been reseted successfully');
+    exports.createSendToken(res, user, 200, 'Password has been reseted successfully');
 });
 
 exports.restrictedTo = (...allowedRoles) => {
@@ -229,7 +234,7 @@ exports.updatePassword = CatchAsync(async(req, res, next) => {
     await req.user.save();
 
     // sign token and send back response
-    createSendToken(res, req.user, 200, "Password updated successfully!");
+    exports.createSendToken(res, req.user, 200, "Password updated successfully!");
 });
 
 exports.deleteMe = CatchAsync(async(req, res, next) => {

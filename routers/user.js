@@ -8,7 +8,7 @@ const {
     updatePassword,
     protect,
     deleteMe,
-    logOut,
+    logOut
 } = require("../controller/auth");
 
 const router = express.Router();

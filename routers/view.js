@@ -1,8 +1,28 @@
 const express = require("express");
 
-const { isLoggedIn, protect } = require("../controller/auth");
+const { 
+    isLoggedIn, 
+    protect
+} = require("../controller/auth");
 
-const { getDashboard, getForgotpassword, getSignup, getLogin, getSettings, getUrls, getCredintials, getUrl, getLanding, getResetPassword, manageUrl } = require("../controller/view");
+const {
+    googleOauth,
+    googleOauthCallback
+} = require("../controller/oAuth");
+
+const { 
+    getDashboard, 
+    getForgotpassword, 
+    getSignup, 
+    getLogin, 
+    getSettings, 
+    getUrls, 
+    getCredintials, 
+    getUrl, 
+    getLanding, 
+    getResetPassword, 
+    manageUrl 
+} = require("../controller/view");
 
 const router = express.Router();
 
@@ -16,6 +36,8 @@ router.get("/account", protect, getDashboard);
 router.get("/forgot", getForgotpassword);
 router.get("/signup", getSignup);
 router.get("/reset/:token", getResetPassword);
+router.get("/login/google/callback", googleOauthCallback);
+router.get("/login/google", googleOauth);
 router.get("/login", getLogin);
 router.get("/:target", getUrl);
 router.get("/", getLanding);

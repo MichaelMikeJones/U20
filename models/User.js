@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const AppError = require('../utilities/AppError');
 
 const UserSchema = new mongoose.Schema({
     fullname: {
@@ -21,19 +22,25 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Password is required!"],
+        //required: [true, "Password is required!"],
         minlength: 8,
         select: false,
     },
     passwordConfirm: {
         type: String,
-        required: [true, "Password Confirm is required!"],
+        //required: [true, "Password Confirm is required!"],
         validate: {
             validator: function(val) {
                 return val === this.password;
             },
             message: "Passwords are not the same",
         },
+    },
+    google: {
+        select: false,
+        id: String,
+        refreshToken: String,
+        accessToken: String,
     },
     signedUpAt: {
         type: Date,
@@ -61,6 +68,15 @@ const UserSchema = new mongoose.Schema({
     twoWayAuth: { type: Boolean, default: false },
     visibleProfile: { type: Boolean, default: true }
 });
+
+UserSchema.pre('save', function(next) {
+    // if password already does exists or passed or google id is passed, we move on
+    if (this.get("password") || (this.password && this.passwordConfirm) || this.google.id) {
+        return next();
+    }
+
+    next(new AppError('Please provide password and passwordConfirm', 400));
+})
 
 // setting passwordChangedAt
 UserSchema.pre("save", function(next) {
