@@ -13,3 +13,20 @@ block content
         .auth.u-margin-top-small
             a.btn.btn-login(href="/forgot") Forgot password?
             a.btn.btn-login(href="/signup") Signup
+
+        .oauth.u-margin-top-medium
+            a(href="/api/auth/google")
+                .oauth-btn
+                    .oauth-icon-wrapper
+                        svg.oauth-icon-svg
+                            use(xlink:href="/img/sprite.svg#icon-google")
+                    p.oauth-btn-text
+                        b Sign in with Google
+            a(href="/api/auth/github")
+                .oauth-btn
+                    .oauth-icon-wrapper
+                        svg.oauth-icon-svg
+                            use(xlink:href="/img/sprite.svg#icon-github1")
+                    p.oauth-btn-text
+                        b Sign in with Github
+

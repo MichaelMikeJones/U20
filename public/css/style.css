@@ -288,7 +288,7 @@ a {
 .btn {
   font-size: 2rem;
   color: inherit;
-  margin: .5rem; }
+  margin: 0.5rem; }
   .btn:hover {
     color: var(--color-grey-light); }
 
@@ -306,8 +306,50 @@ a {
   .btn--cta:hover {
     color: currentColor; }
   .btn--cta--small {
-    padding: .7rem 1.5rem;
+    padding: 0.7rem 1.5rem;
     font-size: 2.5rem; }
+
+.oauth-btn {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+  width: 50%;
+  min-width: 25rem;
+  height: 4.2rem;
+  background-color: #fcfcfc;
+  border-radius: 3px;
+  box-shadow: 0 4px 5px 0 rgba(255, 255, 255, 0.4);
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 200ms ease 0s; }
+
+.oauth-btn .oauth-icon-wrapper {
+  margin: 0.8rem;
+  display: flex;
+  border-radius: 2px;
+  user-select: none; }
+
+.oauth-btn .oauth-icon-svg {
+  width: 20px;
+  height: 20px;
+  user-select: none; }
+
+.oauth-btn .oauth-btn-text {
+  color: #757575;
+  font-size: 1.5rem;
+  letter-spacing: 0.3px;
+  user-select: none; }
+
+.oauth-btn:hover {
+  box-shadow: 0 3px 8px rgba(117, 117, 117, 0.5);
+  user-select: none; }
+
+.oauth-btn:active {
+  box-shadow: 0 1px 1px #757575;
+  background: #f8f8f8;
+  color: #fff;
+  user-select: none; }
 
 .box {
   border-radius: 1rem;
