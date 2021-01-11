@@ -16,6 +16,7 @@ U20 is a URL shortener service, with the following features:
 -   Multer as uploading functionality
 -   Nodemailer as mail sender
 -   Pug as server-side rendering
+-   It support oAuth 2.0 for Google and Github
 -   And security packages
 
 # License

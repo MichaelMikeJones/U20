@@ -1,9 +1,10 @@
+const Axios = require("axios");
 const {google} = require('googleapis');
 const UserModel = require("../models/User");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
 const {setTokenCookie} = require('./auth');
-const Axios = require("axios");
+const {uploadFileByUrl, downloadFile} = require("../controller/uploader");
 
 const redirectSetToken = (res, user) => {
     setTokenCookie(res, user);
@@ -20,6 +21,15 @@ const handleUserLogin = async (data, tokens, serviceProvider) => {
     let user;
     user = await UserModel.findOne({email: data.email});
     if(!user) {
+        // we download the avatar at this point, because if the user signed up before
+        // the user probably has an avatar picture
+        if(data.avatar) {
+            // sending current time in number as userId,
+            // because we haven't made a user document at this point
+            const file = await downloadFile(data.avatar, `avatar-${Date.now()}` );
+            data.avatar = file.fileName;
+        }
+
         const userData = {
             fullname: data.name,
             email: data.email,
