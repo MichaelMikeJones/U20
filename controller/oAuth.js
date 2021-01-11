@@ -4,7 +4,7 @@ const UserModel = require("../models/User");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
 const {setTokenCookie} = require('./auth');
-const {uploadFileByUrl, downloadFile} = require("../controller/uploader");
+const {downloadFile} = require("../controller/uploader");
 
 const redirectSetToken = (res, user) => {
     setTokenCookie(res, user);

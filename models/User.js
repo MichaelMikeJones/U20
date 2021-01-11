@@ -36,6 +36,8 @@ const UserSchema = new mongoose.Schema({
             message: "Passwords are not the same",
         },
     },
+    oneTimePass: String,
+    oneTimePassExpiresIn: Date,
     google: {
         id: String,
         tokens: {
@@ -73,7 +75,7 @@ const UserSchema = new mongoose.Schema({
         default: true
     },
     website: String,
-    twoWayAuth: { type: Boolean, default: false },
+    twoStepAuth: { type: Boolean, default: false },
     visibleProfile: { type: Boolean, default: true }
 });
 

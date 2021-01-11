@@ -5,6 +5,7 @@ const UserModel = require("../models/User");
 const CatchAsync = require("../utilities/CatchAsync");
 const AppError = require("../utilities/AppError");
 const Email = require("../services/Email");
+const UrlModel = require("../models/URL");
 
 exports.signToken = (userID) => {
     // signing jwt token
@@ -59,7 +60,7 @@ exports.signup = CatchAsync(async(req, res, next) => {
 });
 
 exports.login = CatchAsync(async(req, res, next) => {
-    const { email, password } = req.body;
+    const { email, password, code } = req.body;
 
     if (!email || !password) {
         return next(new AppError("Please provide email and password", 400));
@@ -72,8 +73,49 @@ exports.login = CatchAsync(async(req, res, next) => {
         isActive: { $ne: false },
     }).select("+password");
 
+    if(!user.password) {
+        return next(new AppError("This account was created through oAuth, Therefore you can only log in using oAuth"));
+    }
+
     if (!user || !(await user.isPassCorrect(password, user.password))) {
         return next(new AppError("Email or password is wrong!", 401));
+    }
+
+    if(!code && user.twoStepAuth) {
+        // creating a one time pass
+        const oneTimePass = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // saving one time pass to DB, and will expire in 10 minutes
+        user.oneTimePass = oneTimePass;
+        user.oneTimePassExpiresIn = new Date(Date.now() + (10 * 60 * 1000));
+        await user.save();
+
+        console.log(oneTimePass);
+        console.log(user);
+
+        // send a one time pass to email
+        await new Email(user.email).sendOneTimePass(oneTimePass, user);
+
+        return res.status(200).json({
+            status: 'success',
+            message: "Two-step authentication is enabled. One time passcode has been sent to your email. send the passcode as 'code' alongside email and password again to this route"
+        });
+    }
+
+    if(code && user.twoStepAuth) {
+        // two step authentication is enabled and the code has been sent along
+        if(user.oneTimePassExpiresIn < Date.now()) {
+            return next(new AppError("One time passcode has expired. Please login again, but DO NOT provide any 'code' item", 400));
+        }
+
+        if(code !== user.oneTimePass) {
+            return next(new AppError("One time passcode is wrong. Please try again", 400));
+        }
+
+        // deleting one time pass from DB
+        user.oneTimePass = undefined;
+        user.oneTimePassExpiresIn = undefined;
+        await user.save();
     }
 
     exports.createSendToken(res, user, 200, 'Logged in successfully');
@@ -251,6 +293,9 @@ exports.deleteMe = CatchAsync(async(req, res, next) => {
 
     // setting isActive to false
     await UserModel.findByIdAndUpdate(req.user._id, { isActive: false });
+
+    // deleting urls associated with this account
+    await UrlModel.deleteMany({ user: req.user._id });
 
     // send back response
     res.status(204).json({
