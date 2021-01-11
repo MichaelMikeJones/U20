@@ -1,21 +1,21 @@
 .panel.box
     .user
-        img.user__avatar.user__avatar__panel(src=`/img/${user.avatar}` alt=`${user.fullname}`)
+        img.user__avatar.user__avatar__panel(src=` /img/${user.avatar}` alt=`${user.fullname}`)
         span.user__name.u-margin-top-small= user.fullname.split(' ')[0]
     ul.panel__menu
         li.menu__item
             svg.menu__icon
-                use(xlink:href="/img/sprite.svg#icon-account_circle")
+                use(xlink:href=" /siteImages/sprite.svg#icon-account_circle")
             a.menu__link(href="/account") Account
         li.menu__item
             svg.menu__icon
-                use(xlink:href="/img/sprite.svg#icon-link")
+                use(xlink:href=" /siteImages/sprite.svg#icon-link")
             a.menu__link(href="/account/urls") URLs
         li.menu__item
             svg.menu__icon
-                use(xlink:href="/img/sprite.svg#icon-lock")
+                use(xlink:href=" /siteImages/sprite.svg#icon-lock")
             a.menu__link(href="/account/credintials") Credintials
         li.menu__item
             svg.menu__icon
-                use(xlink:href="/img/sprite.svg#icon-cog")
+                use(xlink:href=" /siteImages/sprite.svg#icon-cog")
             a.menu__link(href="/account/settings") Settings

@@ -25,7 +25,7 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
 // serving fav icon
-app.use(favicon(path.resolve(__dirname, 'public', 'img', 'favicon.png')));
+app.use(favicon(path.resolve(__dirname, 'public', 'siteImages', 'favicon.png')));
 
 // serving the public folder
 app.use(express.static(path.join(__dirname, "public")));

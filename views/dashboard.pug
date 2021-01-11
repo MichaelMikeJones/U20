@@ -16,6 +16,6 @@ block content
                 input#website.inputtext(type="url" name="website" value=`${user.website ? user.website : ''}`)
             .form-box
                 label(for="avatar")
-                    img.user__avatar.user__avatar__form#avatar__img(src=`/img/${user.avatar}` alt=`${user.fullname}`)
+                    img.user__avatar.user__avatar__form#avatar__img(src=` /img/${user.avatar}` alt=`${user.fullname}`)
                 input#avatar(type="file" name="avatar" style="display:none;")
             input.btn.btn--cta.btn--cta--small(type="submit" value="Update")
