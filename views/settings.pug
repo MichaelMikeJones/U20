@@ -14,12 +14,12 @@ block content
 
                     span.slider
             .form-box.form-box--horizontal
-                span.setting__title Use Two-factor authenticating
+                span.setting__title Use Two-Step authenticating
                     span.setting__title__secondary After login, email will be used to authenticate
                 label.switch.setting__toggle
-                    if user.twoWayAuth
-                        input#checkbox-twoway-auth.checkbox(type="checkbox" autocomplete="off" checked)
+                    if user.twoStepAuth
+                        input#checkbox-twostep-auth.checkbox(type="checkbox" autocomplete="off" checked)
                     else
-                        input#checkbox-twoway-auth.checkbox(type="checkbox" autocomplete="off")
+                        input#checkbox-twostep-auth.checkbox(type="checkbox" autocomplete="off")
                     span.slider
             input.btn.btn--cta.btn--cta--small(type="submit" value="Update")

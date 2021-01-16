@@ -15,7 +15,7 @@ block content
                     span (optional: can't use this URL without password)
                 input#password.inputtext(type="password" name="password")
             .form-box
-                label(for="date") Expires in
+                label(for="expiresin") Expires in
                     span (optional: URL will expire)
                 input#expiresin.inputtext(type="date" name="date" min=`${new Date().toISOString().split("T")[0]}`)
             .form-box

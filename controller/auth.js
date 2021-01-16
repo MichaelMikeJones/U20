@@ -96,8 +96,10 @@ exports.login = CatchAsync(async(req, res, next) => {
         // send a one time pass to email
         await new Email(user.email).sendOneTimePass(oneTimePass, user);
 
+        // TSACS -> Two-Step Authentication Code Sent
         return res.status(200).json({
             status: 'success',
+            TSACS: true,
             message: "Two-step authentication is enabled. One time passcode has been sent to your email. send the passcode as 'code' alongside email and password again to this route"
         });
     }

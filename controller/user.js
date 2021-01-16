@@ -60,7 +60,7 @@ exports.updateInfo = CatchAsync(async(req, res, next) => {
 
     // update profile
     const filteredObj = filterObj(req.body,
-        "fullname", "email", "avatar", "website", "twoWayAuth", "visibleProfile");
+        "fullname", "email", "avatar", "website", "twoStepAuth", "visibleProfile");
     const updatedUser = await UserModel.findByIdAndUpdate(
         req.user._id,
         filteredObj, {
