@@ -33,10 +33,10 @@ const UrlSchema = new mongoose.Schema({
         min: 0,
         default: 0
     },
-    //public: {
-    //    type: Boolean,
-    //    default: true
-    //},
+    public: {
+       type: Boolean,
+       default: true
+    },
     user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'

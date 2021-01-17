@@ -20,9 +20,11 @@ exports.getUrl = CatchAsync(async(req, res, next) => {
         return next(new AppError("URL is expired", 410));
     }
 
+    console.log(url.visits);
     // add one to visits
     url.visits += 1;
     await url.save();
+    console.log(url.visits);
 
     // add visitor
     const visitorInfo = getVisitorInfo(req);
@@ -66,7 +68,7 @@ exports.getCredintials = (req, res, next) => {
     });
 }
 exports.getUrls = async(req, res, next) => {
-    const urls = await UrlModel.find({ user: req.user._id }).limit(10).sort('-createdAt');
+    const urls = await UrlModel.find({ user: req.user._id }).sort('-createdAt').limit(10);
 
     const noUrls = await UrlModel.countDocuments({ user: req.user._id });
     const noPages = Math.ceil(noUrls / 10);
@@ -77,11 +79,13 @@ exports.getUrls = async(req, res, next) => {
         urls
     });
 }
+
 exports.getSettings = (req, res, next) => {
     res.status(200).render('settings', {
         title: 'Settings'
     });
 }
+
 exports.getLogin = (req, res, next) => {
     if (req.user) return res.status(200).redirect('/');
 
@@ -89,6 +93,7 @@ exports.getLogin = (req, res, next) => {
         title: 'Login'
     });
 }
+
 exports.getSignup = (req, res, next) => {
     if (req.user) return res.status(200).redirect('/');
 
@@ -96,6 +101,28 @@ exports.getSignup = (req, res, next) => {
         title: 'Signup'
     });
 }
+
+exports.getUser = CatchAsync(async (req, res, next) => {
+    const userId = req.params.userId;
+    const user = await UserModel.findOne({_id: userId});
+
+    if(!user.visibleProfile) {
+        return next(new AppError("Due to privacy settings, this user's profile is not visible.", 403));
+    }
+
+    const urls = await UrlModel.find({user:userId, public: true}).sort('-createdAt').limit(10);
+
+    const noUrls = await UrlModel.countDocuments({ user: userId, public: true });
+    const noPages = Math.ceil(noUrls / 10);
+
+    res.status(200).render('profile', {
+        title: user.fullname,
+        user,
+        urls,
+        noPages
+    });
+});
+
 exports.getForgotpassword = (req, res, next) => {
     res.status(200).render('forgot-password', {
         title: 'Forgot Password'

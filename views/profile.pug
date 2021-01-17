@@ -1,0 +1,25 @@
+extends base
+
+block content
+    .panel.box
+        .user
+            img.user__avatar.user__avatar__panel(src=`/img/${user.avatar}` alt=`${user.fullname} pic`)
+            span#user__name--avatar.user__name.u-margin-top-small= user.fullname
+        .panel__container
+            span#user__name--panel.user__name.u-margin-bottom-small= user.fullname
+            .user__website.panel__menu
+                svg.user__website--icon
+                    use(xlink:href="/siteImages/sprite.svg#icon-earth")
+                a.user__website--address(href=`${user.website}`) #{user.fullname.split(" ")[0]}'s Website
+
+    .main-dashboard.box
+        .urls-list.url-list-public
+            include _mixins
+
+            for url in urls
+                +urlElement(url, true)
+            
+            - const pageNumbers = [...Array(noPages).keys()];
+        .pagination.u-margin-top-small#pagination-public(data-userid=`${user._id}`)
+            for pageNumber in pageNumbers
+                button.pagination__item.btn(data-page=`${pageNumber + 1}`)= pageNumber + 1

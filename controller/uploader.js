@@ -5,7 +5,6 @@ const axios = require("axios");
 const mime = require("mime-types");
 const AppError = require("../utilities/AppError");
 const CatchAsync = require("../utilities/CatchAsync");
-const { promisify } = require("util");
 
 const allowedToUpload = ["image"];
 const uploadDirectory = "./public/img";

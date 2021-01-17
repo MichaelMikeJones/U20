@@ -22,13 +22,13 @@ block content
                 label(for="message") Message
                     span (optional: message will be shown to visiters of URL)
                 textarea#message.inputtext(type="text" name="message")
-            //-if user
-            //-    .form-box.form-box--horizontal
-            //-        label(for="public") Public URL?
-            //-            span (URL will be visible to others on this page)
-            //-        label.switch.setting__toggle
-            //-            input#public.checkbox(type="checkbox" name="public")
-            //-            span.slider
+            if user
+               .form-box.form-box--horizontal
+                   label(for="public") Public URL?
+                       span (URL will be visible to others on your profile)
+                   label.switch.setting__toggle
+                       input#public.checkbox(type="checkbox" name="public")
+                       span.slider
             input.btn.btn--cta(type="submit" value="Shorten URL")
         .cp-term.u-margin-top-medium.u-margin-bottom-medium Any illegal use based on any country's law, will have consequences on user.
 

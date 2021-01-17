@@ -46,6 +46,7 @@ exports.getLatestPublicURLs = (req, res, next) => {
 
 exports.getPublicURLs = (req, res, next) => {
     req.query.sort = '-createdAt';
+    // only public urls are visible to public
     req.query.public = true;
     req.query.fields = '-_id -updatedAt -createdAt';
     next();
@@ -69,9 +70,7 @@ exports.getAllUrls = CatchAsync(async(req, res, next) => {
 });
 
 exports.getUrl = CatchAsync(async(req, res, next) => {
-    const url = await UrlModel.findOne({ target: req.params.target }).cache(120, {
-        visits: 1
-    });
+    const url = await UrlModel.findOne({ target: req.params.target }).cache(120);
 
     if (!url) {
         return next(new AppError("URL not found!", 404));

@@ -169,6 +169,12 @@ a {
   display: flex;
   flex-direction: column;
   grid-column: start-panel/end-panel; }
+  .panel__container {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; }
   .panel__menu {
     list-style: none; }
     @media only screen and (max-width: 56.25em) {
@@ -193,7 +199,7 @@ a {
       flex-basis: 50%; } }
   @media only screen and (max-width: 37.5em) {
     .menu__item {
-      margin: .6rem 0; } }
+      margin: 0.6rem 0; } }
   .menu__item .menu__icon {
     display: block;
     width: 2.5rem;
@@ -212,9 +218,23 @@ a {
     .user {
       margin-bottom: 0;
       margin-right: 2rem; } }
-  @media only screen and (max-width: 56.25em) {
-    .user__name {
-      display: none; } }
+  .user__name {
+    font-weight: 700; }
+  .user__website {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-white); }
+    .user__website--icon {
+      display: block;
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-right: 1rem;
+      fill: currentColor; }
+    .user__website--address {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: currentColor; }
   .user__avatar {
     border-radius: 50%; }
     .user__avatar__form {
@@ -234,7 +254,17 @@ a {
   flex-direction: column; }
   .setting__title__secondary {
     font-size: 1.6rem;
-    margin-top: .7rem; }
+    margin-top: 0.7rem; }
+
+@media only screen and (max-width: 56.25em) {
+  #user__name--avatar {
+    display: none; } }
+
+#user__name--panel {
+  display: none; }
+  @media only screen and (max-width: 56.25em) {
+    #user__name--panel {
+      display: initial; } }
 
 .header {
   display: flex;

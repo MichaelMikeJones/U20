@@ -16,7 +16,8 @@ const {
     getUrl, 
     getLanding, 
     getResetPassword, 
-    manageUrl 
+    manageUrl,
+    getUser
 } = require("../controller/view");
 
 const router = express.Router();
@@ -32,6 +33,7 @@ router.get("/forgot", getForgotpassword);
 router.get("/signup", getSignup);
 router.get("/reset/:token", getResetPassword);
 router.get("/login", getLogin);
+router.get("/user/:userId", getUser)
 router.get("/:target", getUrl);
 router.get("/", getLanding);
 
