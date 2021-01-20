@@ -19,7 +19,7 @@ block content
                 input#expiresIn.inputtext(type="date" name="expiresIn" value=`${url.expiresIn ? url.expiresIn.toISOString().split('T')[0] : ''}`)
             .form-box
                 label(for="message") Message
-                textarea#message.inputtext(name="message" value=`${url.message ? url.message : ''}`)
+                textarea#message.inputtext(name="message")= `${url.message ? url.message : ''}`
             input.btn.btn--cta.btn--cta--small(type="submit" value="Update")
 
         label(for="selectYear") Select Year:

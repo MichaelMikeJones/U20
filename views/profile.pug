@@ -10,7 +10,8 @@ block content
             .user__website.panel__menu
                 svg.user__website--icon
                     use(xlink:href="/siteImages/sprite.svg#icon-earth")
-                a.user__website--address(href=`${user.website}`) #{user.fullname.split(" ")[0]}'s Website
+                if user.website
+                    a.user__website--address(href=`${user.website}`) #{user.fullname.split(" ")[0]}'s Website
 
     .main-dashboard.box
         .urls-list.url-list-public
