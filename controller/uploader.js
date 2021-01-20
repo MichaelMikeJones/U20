@@ -39,7 +39,6 @@ exports.uploader = multer({
 });
 
 exports.downloadFile = async(url, userId) => {
-    console.log("WE are in the downloadFile", url, userId);
     // Testing if the file size is exceeded
     const head = await axios({
         url,

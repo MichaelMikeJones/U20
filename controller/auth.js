@@ -90,9 +90,6 @@ exports.login = CatchAsync(async(req, res, next) => {
         user.oneTimePassExpiresIn = new Date(Date.now() + (10 * 60 * 1000));
         await user.save();
 
-        console.log(oneTimePass);
-        console.log(user);
-
         // send a one time pass to email
         await new Email(user.email).sendOneTimePass(oneTimePass, user);
 

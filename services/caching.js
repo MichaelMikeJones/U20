@@ -45,8 +45,6 @@ mongoose.Query.prototype.exec = async function() {
     if(resRedisQuery) {
         const docs = JSON.parse(resRedisQuery);
 
-        console.log(docs);
-
         // if any property is meant to increase or decrease
         // by retrieving, it will be passed in changes Object
         // like changes = {visits: 1} which increaments visits
