@@ -14,7 +14,8 @@ const redirectSetToken = (res, user) => {
 const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_OAUTH_CLIENT_ID,
     process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-    "http://127.0.0.1:5000/api/auth/google/callback"
+    process.env.GOOGLE_OAUTH_CALLBACK_URL
+    //"http://127.0.0.1:5000/api/auth/google/callback"
 );
 
 const handleUserLogin = async (data, tokens, serviceProvider) => {
