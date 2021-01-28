@@ -23,3 +23,13 @@ block content
                         input#checkbox-twostep-auth.checkbox(type="checkbox" autocomplete="off")
                     span.slider
             input.btn.btn--cta.btn--cta--small(type="submit" value="Update")
+        
+        fieldset.danger-zone.u-margin-top-medium
+            legend Danger Zone
+            form#form-deleteaccount.form.form-dashboard
+                h2.u-margin-bottom-small Delete my account
+                .form-box
+                    label(for="password") Password
+                    input#password.inputtext(type="password" name="password" required="" minlength="8")
+                input.btn.btn--cta.btn--cta--small(type="submit" value="Delete")
+

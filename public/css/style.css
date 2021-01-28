@@ -315,6 +315,13 @@ a {
     .create-result .group--horizontal > * {
       margin-left: 1rem; }
 
+.danger-zone {
+  padding: 2rem;
+  border: 3px solid var(--color-red);
+  border-radius: 1rem; }
+  .danger-zone legend {
+    font-size: 3rem; }
+
 .btn {
   font-size: 2rem;
   color: inherit;

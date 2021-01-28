@@ -73,11 +73,15 @@ exports.login = CatchAsync(async(req, res, next) => {
         isActive: { $ne: false },
     }).select("+password");
 
-    if(!user.password) {
+    if (!user) {
+        return next(new AppError("Email or password is wrong!", 401));
+    }
+
+    if (!user.password) {
         return next(new AppError("This account was created through oAuth, Therefore you can only log in using oAuth"));
     }
 
-    if (!user || !(await user.isPassCorrect(password, user.password))) {
+    if (!(await user.isPassCorrect(password, user.password))) {
         return next(new AppError("Email or password is wrong!", 401));
     }
 
@@ -253,6 +257,9 @@ exports.restrictedTo = (...allowedRoles) => {
 }
 
 exports.updatePassword = CatchAsync(async(req, res, next) => {
+    // FIXME: When signed up using oAuth you can't set password anymore
+    // sould check if password exists and then demand password
+
     // check if fields were passed
     const { password, passwordConfirm, passwordCurrent } = req.body;
     if (!password || !passwordConfirm || !passwordCurrent) {
@@ -287,7 +294,7 @@ exports.deleteMe = CatchAsync(async(req, res, next) => {
 
     // check the current password is correct
     if (!(await req.user.isPassCorrect(password, req.user.password))) {
-        return next(new AppError("password is not correct!"));
+        return next(new AppError("password is not correct!", 401));
     }
 
     // setting isActive to false
@@ -295,6 +302,9 @@ exports.deleteMe = CatchAsync(async(req, res, next) => {
 
     // deleting urls associated with this account
     await UrlModel.deleteMany({ user: req.user._id });
+
+    // FIXME: URLS Are not eliminated when dropping multiple of them
+    // (using UrlModel.deleteMany).
 
     // send back response
     res.status(204).json({
