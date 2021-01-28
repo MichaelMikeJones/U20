@@ -6,6 +6,11 @@ const redisClient = redis.createClient(process.env.REDIS_CON_STRING);
 const exec = mongoose.Query.prototype.exec;
 redisClient.get = promisify(redisClient.get);
 
+mongoose.Query.prototype.delAllCache = function() {
+    this.deleteAllCache = true;
+    return this;
+}
+
 mongoose.Query.prototype.delCache = function() {
     this.deleteCache = true;
     return this;
@@ -20,7 +25,12 @@ mongoose.Query.prototype.cache = function(ttl = 120, changes = {}) {
 
 mongoose.Query.prototype.exec = async function() {
     // if we dont wanna cache or delete cache we move on
-    if(!this.useCaching && !this.deleteCache) {
+    if(!this.useCaching && !this.deleteCache && !this.deleteAllCache) {
+        return exec.apply(this, arguments);
+    }
+
+    if(this.deleteAllCache) {
+        redisClient.flushall();
         return exec.apply(this, arguments);
     }
 
@@ -97,7 +107,11 @@ mongoose.Query.prototype.exec = async function() {
 
     // if it does not exist in redis, get from mongo
     const resMongoQuery = await exec.apply(this, arguments);
-    redisClient.set(key, JSON.stringify(resMongoQuery), 'EX', this.cacheTtl);
+
+    if (resMongoQuery) {
+        // if the result is null, we dont cache it
+        redisClient.set(key, JSON.stringify(resMongoQuery), 'EX', this.cacheTtl);
+    }
 
     return resMongoQuery;
 }

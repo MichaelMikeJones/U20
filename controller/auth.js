@@ -301,10 +301,7 @@ exports.deleteMe = CatchAsync(async(req, res, next) => {
     await UserModel.findByIdAndUpdate(req.user._id, { isActive: false });
 
     // deleting urls associated with this account
-    await UrlModel.deleteMany({ user: req.user._id });
-
-    // FIXME: URLS Are not eliminated when dropping multiple of them
-    // (using UrlModel.deleteMany).
+    await UrlModel.deleteMany({ user: req.user._id }).delAllCache();
 
     // send back response
     res.status(204).json({
