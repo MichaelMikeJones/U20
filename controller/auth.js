@@ -273,9 +273,6 @@ exports.restrictedTo = (...allowedRoles) => {
 }
 
 exports.updatePassword = CatchAsync(async(req, res, next) => {
-    // FIXME: When signed up using oAuth you can't set password anymore
-    // sould check if password exists and then demand password
-
     // check if fields were passed
     const { password, passwordConfirm, passwordCurrent } = req.body;
 
