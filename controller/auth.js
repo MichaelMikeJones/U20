@@ -48,15 +48,31 @@ exports.createSendToken = (res, user, statusCode, message = undefined) => {
 };
 
 exports.signup = CatchAsync(async(req, res, next) => {
-    // Creating user
-    const newUser = await UserModel.create({
-        fullname: req.body.fullname,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-    });
+    // test if user was created with this email but isActive is set to false (account was deleted)
+    const user = await UserModel.findOne({ email: req.body.email }).select('+isActive');
 
-    exports.createSendToken(res, newUser, 201, "Signed up successfully.");
+    // if the user exists and isActive(was deleted), then we grant access to reactivate it
+    if(user && !user.isActive) {
+        console.log(user);
+        // user document exists, just updating it
+        user.fullname = req.body.fullname;
+        user.email = req.body.email;
+        user.password = req.body.password;
+        user.passwordConfirm = req.body.passwordConfirm;
+        user.isActive = true;
+        await user.save();
+        console.log(user);
+    } else {
+        // Creating user
+        user = await UserModel.create({
+            fullname: req.body.fullname,
+            email: req.body.email,
+            password: req.body.password,
+            passwordConfirm: req.body.passwordConfirm,
+        });
+    }
+
+    exports.createSendToken(res, user, 201, "Signed up successfully.");
 });
 
 exports.login = CatchAsync(async(req, res, next) => {
@@ -262,18 +278,22 @@ exports.updatePassword = CatchAsync(async(req, res, next) => {
 
     // check if fields were passed
     const { password, passwordConfirm, passwordCurrent } = req.body;
-    if (!password || !passwordConfirm || !passwordCurrent) {
+
+    if ((req.user.password && !passwordCurrent) || !passwordConfirm || !password) {
+        // if password is not set for user, we won't demand it to update password
         return next(
             new AppError(
-                "Please provide required fields: passwordCurrent, password, passwordConfirm",
+                `Please provide required fields: ${req.user.password ? 'passwordCurrent, ' : ''}password, passwordConfirm`,
                 400
             )
         );
     }
 
-    // check the current password is correct
-    if (!(await req.user.isPassCorrect(passwordCurrent, req.user.password))) {
-        return next(new AppError("Current password is not correct!"));
+    if (req.user.password) {
+        // check the current password is correct
+        if (!(await req.user.isPassCorrect(passwordCurrent, req.user.password))) {
+            return next(new AppError("Current password is not correct!"));
+        }
     }
 
     // save the password
@@ -286,15 +306,18 @@ exports.updatePassword = CatchAsync(async(req, res, next) => {
 });
 
 exports.deleteMe = CatchAsync(async(req, res, next) => {
-    // check if password was passed
-    const { password } = req.body;
-    if (!password) {
-        return next(new AppError("Please provide your password.", 400));
-    }
+    // if password is set, we demand it
+    if (req.user.password) {
+        // check if password was passed
+        const { password } = req.body;
+        if (!password) {
+            return next(new AppError("Please provide your password.", 400));
+        }
 
-    // check the current password is correct
-    if (!(await req.user.isPassCorrect(password, req.user.password))) {
-        return next(new AppError("password is not correct!", 401));
+        // check the current password is correct
+        if (!(await req.user.isPassCorrect(password, req.user.password))) {
+            return next(new AppError("password is not correct!", 401));
+        }
     }
 
     // setting isActive to false

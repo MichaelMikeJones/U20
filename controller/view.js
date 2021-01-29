@@ -62,7 +62,8 @@ exports.getDashboard = (req, res, next) => {
 }
 exports.getCredintials = (req, res, next) => {
     res.status(200).render('credintials', {
-        title: 'Credintials'
+        title: 'Credintials',
+        user: req.user
     });
 }
 exports.getUrls = async(req, res, next) => {
@@ -80,7 +81,8 @@ exports.getUrls = async(req, res, next) => {
 
 exports.getSettings = (req, res, next) => {
     res.status(200).render('settings', {
-        title: 'Settings'
+        title: 'Settings',
+        user: req.user
     });
 }
 

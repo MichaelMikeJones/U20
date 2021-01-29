@@ -6,11 +6,12 @@ block content
 
     .main-dashboard.box
         form#form-updatepass.form.form-dashboard
+            if user.password
+                .form-box
+                    label(for="currentpassword") Current password
+                    input#currentpassword.inputtext(type="password" name="currentpassword" minlength="8" required)
             .form-box
-                label(for="currentpassword") Current password
-                input#currentpassword.inputtext(type="password" name="currentpassword" minlength="8" required)
-            .form-box
-                label(for="password") Password
+                label(for="password") New password
                 input#password.inputtext(type="password" name="password" minlength="8" required)
             .form-box
                 label(for="passwordconfirm") Confirm password

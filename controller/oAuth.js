@@ -49,6 +49,9 @@ const handleUserLogin = async (data, tokens, serviceProvider) => {
             id: data.id,
             tokens
         };
+
+        // if account was deleted before, after login set account to active
+        user.isActive = true;
         await user.save();
     }
 
