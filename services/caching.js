@@ -2,9 +2,12 @@ const mongoose = require("mongoose");
 const redis = require("redis");
 const { promisify } = require('util');
 
-const redisClient = redis.createClient(process.env.REDIS_CON_STRING);
-const exec = mongoose.Query.prototype.exec;
+const redisClient = redis.createClient(process.env.REDIS_CON_STRING, {
+    db: parseInt(process.env.REDIS_DB_INDEX)
+});
 redisClient.get = promisify(redisClient.get);
+
+const exec = mongoose.Query.prototype.exec;
 
 mongoose.Query.prototype.delAllCache = function() {
     this.deleteAllCache = true;
@@ -30,7 +33,7 @@ mongoose.Query.prototype.exec = async function() {
     }
 
     if(this.deleteAllCache) {
-        redisClient.flushall();
+        redisClient.flushdb();
         return exec.apply(this, arguments);
     }
 
